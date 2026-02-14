@@ -1,0 +1,1 @@
+export const GAMEMODE_OPTIONS = ["survival", "creative", "adventure", "spectator"];
