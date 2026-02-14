@@ -1,6 +1,6 @@
 # Minecraft Server Builder
 
-<code>Avaible at <a href="minecraft.coisas-mais-estranhas.com.br">minecraft.coisas-mais-estranhas.com.br</a></code>
+<code>Avaible at <a href="https://minecraft.coisas-mais-estranhas.com.br" target="_blank" rel="noopener noreferrer">minecraft.coisas-mais-estranhas.com.br</a></code>
 
 This project lets you build and configure a Minecraft server, supporting gamerules, properties and start file management with a interactive web interface. You can manage modpacks, mods and datapacks available in [Modrinth](https://www.curseforge.com/minecraft/mc-mods).
 
