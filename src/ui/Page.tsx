@@ -5,13 +5,12 @@ export const Page = memo(({ children, locked = false }: { children: ReactNode; l
     const {t} = useTranslation();
     
     return (
-        <div className={`min-h-screen bg-bg-surface text-slate-200 selection:bg-primary/30 ${locked ? 'overflow-hidden' : ''}`}>
-            <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className={`min-h-screen text-slate-200 selection:bg-primary/30 ${locked ? 'overflow-hidden' : ''}`}>
+            <div className="fixed inset-0 bg-bg-surface overflow-hidden pointer-events-none">
                 <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full" />
                 <div className="absolute top-[20%] -right-[5%] w-[30%] h-[30%] bg-accent/5 blur-[100px] rounded-full" />
             </div>
             {children}
-
             <a
                 href="https://modrinth.com"
                 target="_blank"
@@ -19,7 +18,7 @@ export const Page = memo(({ children, locked = false }: { children: ReactNode; l
                 className="group fixed bottom-6 right-25 bg-green-500 hover:bg-green-600 text-white px-4 py-4 rounded-full shadow-lg transition-all hover:scale-105 pointer-events-auto z-50 flex items-center hover:gap-2 overflow-hidden"
                 aria-label="Powered by Modrinth"
             >
-                <img src="modrinth_mark-dark__32x32.png" className="w-6 h-6 flex-shrink-0 brightness-0 invert" />
+                <img src="modrinth_mark-dark__32x32.png" className="w-6 h-6 shrink-0 brightness-0 invert" />
                 <span className="max-w-0 group-hover:max-w-xs transition-all duration-300 whitespace-nowrap overflow-hidden font-medium">
                     {t("Powered by Modrinth")}
                 </span>

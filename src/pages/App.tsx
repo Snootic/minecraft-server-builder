@@ -1,53 +1,67 @@
-import { useState, useMemo, Suspense, useCallback, useDeferredValue } from 'react';
-import { useAppStore } from '@stores/useStore';
-import { Layers } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-import { useSelectionFeedback } from '@features/App/hooks/useSelectionFeedback';
-import { useProjectData } from '@features/App/hooks/useProjectData';
 import {
-	BuildButton,
-	BuildManager,
-	FilterSidebar,
-	LoaderBar,
-	ModpackDetail,
-	SearchBar,
+    useState,
+    useMemo,
+    Suspense,
+    useCallback,
+    useDeferredValue,
+} from "react";
+import { useAppStore } from "@stores/useStore";
+import { ChevronDown, Layers } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useSelectionFeedback } from "@features/App/hooks/useSelectionFeedback";
+import { useProjectData } from "@features/App/hooks/useProjectData";
+import {
+    BuildButton,
+    BuildManager,
+    FilterSidebar,
+    LoaderBar,
+    ModpackDetail,
+    SearchBar,
     SearchResult,
     SelectedItemsManager,
-} from '@features/App';
-import { useShallow } from 'zustand/react/shallow';
-import type { Category } from '@/types';
-import UI from '@/ui';
+} from "@features/App";
+import { useShallow } from "zustand/react/shallow";
+import type { Category } from "@/types";
+import UI from "@/ui";
 
 const App = () => {
     const { t } = useTranslation();
 
     const [pageOffset, setPageOffset] = useState<number>(0);
     const [modpackQuery, setModpackQuery] = useState<string>("");
-    const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<Category[]>(
+        [],
+    );
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-    const [showSelectedItemsManager, setShowSelectedItemsManager] = useState<boolean>(false);
+    const [showSelectedItemsManager, setShowSelectedItemsManager] =
+        useState<boolean>(false);
     const [showBuildManager, setShowBuildManager] = useState<boolean>(false);
 
-	const { selectedVersion, selectedLoader, setSelectedLoader } = useAppStore(
-		useShallow((state) => ({
-			selectedVersion: state.selectedVersion,
-			selectedLoader: state.selectedLoader,
-			setSelectedLoader: state.setSelectedLoader,
-		}))
-	);
+    const { selectedVersion, selectedLoader, setSelectedLoader } = useAppStore(
+        useShallow((state) => ({
+            selectedVersion: state.selectedVersion,
+            selectedLoader: state.selectedLoader,
+            setSelectedLoader: state.setSelectedLoader,
+        })),
+    );
 
     const deferredQuery = useDeferredValue(modpackQuery);
 
     const searchParams = useMemo(() => {
         const projectTypesFacet: { [key: string]: string[] } = {};
         if (selectedLoader && selectedLoader.supported_project_types) {
-            projectTypesFacet["project_type"] = Object.values(selectedLoader.supported_project_types);
+            projectTypesFacet["project_type"] = Object.values(
+                selectedLoader.supported_project_types,
+            );
         }
         if (selectedTypes.length > 0 && selectedLoader?.name !== "datapack") {
-            if (projectTypesFacet["project_type"] && Object.keys(projectTypesFacet).length > 0) {
-                projectTypesFacet["project_type"] = projectTypesFacet["project_type"].filter(type =>
-                    selectedTypes.includes(type)
-                );
+            if (
+                projectTypesFacet["project_type"] &&
+                Object.keys(projectTypesFacet).length > 0
+            ) {
+                projectTypesFacet["project_type"] = projectTypesFacet[
+                    "project_type"
+                ].filter((type) => selectedTypes.includes(type));
             } else {
                 projectTypesFacet["project_type"] = selectedTypes;
             }
@@ -58,7 +72,7 @@ const App = () => {
         }
 
         if (selectedVersion) {
-            projectTypesFacet['versions'] = [selectedVersion];
+            projectTypesFacet["versions"] = [selectedVersion];
         }
 
         return {
@@ -66,9 +80,16 @@ const App = () => {
             loader: selectedLoader?.name,
             categories: selectedCategories.map((c) => c.name),
             facets: projectTypesFacet,
-            offset: pageOffset
+            offset: pageOffset,
         };
-    }, [deferredQuery, pageOffset, selectedCategories, selectedLoader, selectedVersion, selectedTypes]);
+    }, [
+        deferredQuery,
+        pageOffset,
+        selectedCategories,
+        selectedLoader,
+        selectedVersion,
+        selectedTypes,
+    ]);
 
     const projectData = useProjectData();
 
@@ -80,9 +101,15 @@ const App = () => {
         setShowBuildManager(true);
     }, []);
 
-    useSelectionFeedback(handleManageSelection, (showSelectedItemsManager || showBuildManager), projectData.mainProject);
+    useSelectionFeedback(
+        handleManageSelection,
+        showSelectedItemsManager || showBuildManager,
+        projectData.mainProject,
+    );
 
     const hasSelectedProject = useAppStore((s) => s.selectedProject !== null);
+    
+    const [showFilters, setShowFilters] = useState(false);
 
     return (
         <UI.Page locked={hasSelectedProject}>
@@ -96,7 +123,11 @@ const App = () => {
                         {projectData.isLoading ? (
                             <UI.Loading size="lg" />
                         ) : (
-                            <BuildManager onClose={() => setShowBuildManager(false)} projects={projectData} manageButton={handleManageSelection} />
+                            <BuildManager
+                                onClose={() => setShowBuildManager(false)}
+                                projects={projectData}
+                                manageButton={handleManageSelection}
+                            />
                         )}
                     </Suspense>
                 </div>
@@ -107,15 +138,19 @@ const App = () => {
                         {projectData.isLoading ? (
                             <UI.Loading size="lg" />
                         ) : (
-                            <SelectedItemsManager onClose={() => setShowSelectedItemsManager(false)} projects={projectData} />
+                            <SelectedItemsManager
+                                onClose={() =>
+                                    setShowSelectedItemsManager(false)
+                                }
+                                projects={projectData}
+                            />
                         )}
                     </Suspense>
                 </div>
             )}
 
-
-            <main className="max-w-[85%] max-h-[80vh] mx-auto px-6 py-8 grid grid-cols-12 gap-8">
-                <aside className="col-span-4">
+            <main className="max-w-[95%] md:max-w-[85%] max-h-[80vh] mx-auto px-4 py-4 grid grid-cols-12 gap-4 md:gap-8">
+                <aside className="relative col-span-4 md:grid hidden">
                     <Suspense fallback={<UI.Loading size="md" />}>
                         <FilterSidebar
                             selectedCategories={selectedCategories}
@@ -127,30 +162,54 @@ const App = () => {
                     <BuildButton onClick={handleBuild} />
                 </aside>
 
-                <section className="col-span-8 space-y-6">
-                    <div className="flex items-center justify-between glass-panel p-2">
-                        <Suspense fallback={<UI.Loading size="sm" />}>
-                            <LoaderBar
-                                selectedLoader={selectedLoader}
-                                setSelectedLoader={setSelectedLoader}
+                <section className="relative col-span-12 md:col-span-8 space-y-6">
+                    <div className="relative z-10 grid grid-cols-2 glass-panel p-2 gap-2">
+                        <div className="col-span-2 flex items-center justify-between">
+                            <Suspense fallback={<UI.Loading size="sm" />}>
+                                <LoaderBar
+                                    selectedLoader={selectedLoader}
+                                    setSelectedLoader={setSelectedLoader}
+                                />
+                            </Suspense>
+                            <SearchBar
+                                value={modpackQuery}
+                                onChange={setModpackQuery}
                             />
-                        </Suspense>
-                        <SearchBar
-                            value={modpackQuery}
-                            onChange={setModpackQuery}
-                        />
+                        </div>
+                        <div className={`md:hidden col-span-2 flex relative justify-between`}>
+                            <div
+                                className="flex items-center justify-center gap-1 text-slate-400 cursor-pointer p-2 border border-white/10 rounded-xl"
+                                onClick={() => setShowFilters(prev => !prev)}
+                            >
+                                <h3>Filters</h3>
+                                <ChevronDown />
+                            </div>
+                            <BuildButton onClick={handleBuild} />
+                            <div className={`absolute top-full right-0 w-full bg-(--bg-surface-light) rounded-xl border border-white/10 p-1 ${showFilters ? "block" : "hidden"}`}>
+                                <Suspense fallback={<UI.Loading size="md" />}>
+                                    <FilterSidebar
+                                        selectedCategories={selectedCategories}
+                                        onCategoriesChange={setSelectedCategories}
+                                        selectedTypes={selectedTypes}
+                                        onTypesChange={setSelectedTypes}
+                                    />
+                                </Suspense>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="space-y-4">
                         <div className="flex items-center gap-2 text-slate-400 mb-2">
                             <Layers size={18} />
                             <h2 className="font-bold select-none">
-                                {!selectedLoader?.name ? t('Popular Modpacks and Datapacks')
-                                    : selectedLoader.name === "datapack" ? t('Popular Datapacks')
-                                        : t('Popular Modpacks')}
+                                {!selectedLoader?.name
+                                    ? t("Popular Modpacks and Datapacks")
+                                    : selectedLoader.name === "datapack"
+                                      ? t("Popular Datapacks")
+                                      : t("Popular Modpacks")}
                             </h2>
                         </div>
-                        <Suspense fallback={<UI.Loading size='lg' />}>
+                        <Suspense fallback={<UI.Loading size="lg" />}>
                             <SearchResult
                                 params={searchParams}
                                 page={pageOffset}

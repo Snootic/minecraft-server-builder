@@ -74,6 +74,10 @@
   --text-contrast: #fff7ed; /* orange-50, light for contrast bg */
 }
 
+html, body {
+    background-color: var(--color-bg-surface);
+}
+
 @layer components {
   .glass-panel {
     background: var(--glass-bg);

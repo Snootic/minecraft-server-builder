@@ -27,11 +27,11 @@ const BuildButton = memo(({ onClick }: BuildButtonProps) => {
             onClick={onClick}
             disabled={hasIncompatibilities}
             className={`
-                w-full mt-4 px-6 py-4 rounded-xl font-bold text-lg
+                w-[70%] md:w-full md:mt-4 px-4 py-2 md:py-6 rounded-xl font-bold text-lg
                 transition-all duration-300
                 ${hasIncompatibilities
                     ? 'bg-red-500/90 hover:bg-red-600 text-white cursor-not-allowed'
-                    : 'bg-[var(--accent)] hover:bg-[var(--accent)]/80 text-[var(--bg-surface-light)] cursor-pointer'
+                    : 'bg-(--accent) hover:bg-(--accent)/80 text-(--bg-surface-light) cursor-pointer'
                 }
                 shadow-lg hover:shadow-xl
             `}
