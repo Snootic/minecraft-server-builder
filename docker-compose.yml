@@ -1,0 +1,15 @@
+services:
+  minecraft-server-builder:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: minecraft-server-builder
+    networks:
+      - local
+    ports:
+      - '3000'
+    restart: unless-stopped
+
+networks:
+  local:
+    external: true
