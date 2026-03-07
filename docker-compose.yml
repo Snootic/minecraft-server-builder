@@ -1,15 +1,25 @@
 services:
-  minecraft-server-builder:
-    build:
-      context: .
-      dockerfile: dockerfile
-    container_name: minecraft-server-builder
-    networks:
-      - local
-    ports:
-      - '3000'
-    restart: unless-stopped
+    minecraft-server-builder:
+        build:
+            context: .
+            dockerfile: dockerfile
+        container_name: minecraft-server-builder
+        networks:
+            - local
+        ports:
+            - "3000"
+        labels:
+            #See https://github.com/snootic/lab for more details on how this all work
+            - "cloudflare.domain=coisas-mais-estranhas.com.br"
+            - "cloudflare.subdomain=minecraft"
+            - "cloudflare.type=CNAME"
+            - "cloudflare.proxied=true"
+
+            - "traefik.enable=true"
+            - "traefik.http.routers.mcserverbuilder.rule=Host(`minecraft.coisas-mais-estranhas.com.br`)"
+            - "traefik.http.routers.mcserverbuilder.tls=true"
+        restart: unless-stopped
 
 networks:
-  local:
-    external: true
+    local:
+        external: true
