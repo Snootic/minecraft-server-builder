@@ -100,8 +100,8 @@ const ModpackDetail = ({ onClose }: DetailProps) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/30">
-            <UI.GlassCard className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-6 bg-black/30">
+            <UI.GlassCard className="w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col relative">
                 <button
                     onClick={() => {
                         onClose();
@@ -131,14 +131,14 @@ const ModpackDetail = ({ onClose }: DetailProps) => {
                     </span>
                 </button>
 
-                <div className="overflow-y-auto custom-scrollbar p-8">
-                    <div className="flex gap-8 mb-8">
+                <div className="overflow-y-auto custom-scrollbar p-4 md:p-8">
+                    <div className="flex flex-col md:flex-row gap-4 md:gap-8 mb-6 md:mb-8">
                         {selectedProject?.icon_url && (
-                            <img src={selectedProject.icon_url} alt={selectedProject.title} className="w-32 h-32 rounded-3xl shadow-2xl" />
+                            <img src={selectedProject.icon_url} alt={selectedProject.title} className="w-20 h-20 md:w-32 md:h-32 rounded-3xl shadow-2xl" />
                         )}
                         <div className="flex-1">
-                            <h2 className="text-4xl font-black mb-2">{selectedProject?.title}</h2>
-                            <div className="flex gap-3 mb-4">
+                            <h2 className="text-2xl md:text-4xl font-black mb-2">{selectedProject?.title}</h2>
+                            <div className="flex flex-wrap gap-2 md:gap-3 mb-4">
                                 <span className="px-3 py-1 bg-[var(--accent)]/30 text-[var(--accent)] rounded-full text-xs font-bold">
                                     {selectedProject?.author}
                                 </span>

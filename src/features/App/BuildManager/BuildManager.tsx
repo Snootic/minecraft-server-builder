@@ -53,8 +53,8 @@ const BuildManager = ({ onClose, projects, manageButton }: BuildManagerProps) =>
         }));
     }, [commonVersions]);
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/30">
-            <UI.GlassCard className="w-7xl h-[90vh] overflow-hidden flex flex-col relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-6 bg-black/30">
+            <UI.GlassCard className="w-full max-w-7xl h-[90vh] overflow-hidden flex flex-col relative">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 py-2 px-3 hover:bg-[var(--contrast-dark)] rounded-full transition-colors z-10 group flex items-center overflow-hidden transition-all duration-500 cursor-pointer"
@@ -69,18 +69,18 @@ const BuildManager = ({ onClose, projects, manageButton }: BuildManagerProps) =>
                     </span>
                 </button>
 
-                <div className="p-8 flex gap-4 items-center">
-                    <h2 className="text-4xl font-black mb-2">{t('Build Server')}</h2>
+                <div className="p-4 md:p-8 flex flex-col md:flex-row gap-4 items-start md:items-center">
+                    <h2 className="text-2xl md:text-4xl font-black mb-0 md:mb-2">{t('Build Server')}</h2>
 
-                    <div className="grid grid-cols-2 gap-2 max-w-[26vw]">
+                    <div className="grid grid-cols-2 gap-2 w-full md:w-auto md:max-w-[26vw]">
                         <h3 className="font-bold text-2xl text-[var(--accent)]/70">{t("Chosen version")}</h3>
                         <UI.Components.SelectMenu options={versions} onChange={setChosenVersion} value={chosenVersion} placeholder={t("Select a game version")}/>
                     </div>
                 </div>
 
-                <div className="px-8 pb-8 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
-                    <div className="grid grid-cols-2 items-center gap-2">
-                        <div className="grid grid-cols-2 col-span-1 gap-2">
+                <div className="px-4 pb-4 md:px-8 md:pb-8 flex flex-col gap-4 overflow-y-auto custom-scrollbar">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-4">
                             <div className="flex flex-col gap-2">
                                 <div>
                                     <span className="font-semibold">{t("Project")}:</span>{" "}
@@ -95,15 +95,15 @@ const BuildManager = ({ onClose, projects, manageButton }: BuildManagerProps) =>
                                     <span>{selectedDatapacks.length}</span>
                                 </div>
                                 <div className="flex items-center gap-1">
-                                    <UI.Components.SelectMenu 
-                                        options={commonLoaders.map(l => ({ label: l, value: l }))} 
+                                    <UI.Components.SelectMenu
+                                        options={commonLoaders.map(l => ({ label: l, value: l }))}
                                         onChange={(value) => setSelectedLoader(loaders?.find(loader => loader.name === value) ?? null)}
                                         value={selectedLoader?.name ?? ""}
                                         placeholder={t("Select a game loader")}
                                     />
 
                                     <button
-                                        className="bg-[var(--accent)] hover:bg-[var(--accent-dark)] text-white font-bold py-2 px-4 rounded transition-colors w-fit cursor-pointer"
+                                        className="bg-[var(--accent)] hover:bg-[var(--accent-dark)] text-white font-bold py-2 px-4 rounded transition-colors w-fit shrink-0 cursor-pointer"
                                         type="button"
                                         onClick={manageButton}
                                     >
@@ -113,15 +113,13 @@ const BuildManager = ({ onClose, projects, manageButton }: BuildManagerProps) =>
                                 </div>
                             </div>
                             <AdditionalMods/>
-
-                            <div className="col-span-2 bg-white/5 border border-white/10 p-4 rounded-xl">
-                                <GameruleEditor />
-                            </div>
                         </div>
 
-                        <div className="col-span-1 grid">
-                            <QuickSettings />
-                        </div>
+                        <QuickSettings />
+                    </div>
+
+                    <div className="bg-white/5 border border-white/10 p-4 rounded-xl">
+                        <GameruleEditor />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
