@@ -27,7 +27,7 @@ const BuildButton = memo(({ onClick }: BuildButtonProps) => {
             onClick={onClick}
             disabled={hasIncompatibilities}
             className={`
-                w-[70%] md:w-full md:mt-4 px-4 py-2 md:py-6 rounded-xl font-bold text-lg
+                w-[70%] md:w-full md:mt-4 shrink-0 px-4 py-2 md:py-6 rounded-xl font-bold text-lg
                 transition-all duration-300
                 ${hasIncompatibilities
                     ? 'bg-red-500/90 hover:bg-red-600 text-white cursor-not-allowed'

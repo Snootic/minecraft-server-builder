@@ -150,7 +150,7 @@ const App = () => {
             )}
 
             <main className="max-w-[95%] md:max-w-[85%] max-h-[80vh] mx-auto px-4 py-4 grid grid-cols-12 gap-4 md:gap-8">
-                <aside className="relative col-span-4 md:grid hidden">
+                <aside className="relative col-span-4 hidden md:flex md:flex-col">
                     <Suspense fallback={<UI.Loading size="md" />}>
                         <FilterSidebar
                             selectedCategories={selectedCategories}
