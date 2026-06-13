@@ -13,7 +13,7 @@ services:
             - "cloudflare.domain=coisas-mais-estranhas.com.br"
             - "cloudflare.subdomain=minecraft"
             - "cloudflare.type=CNAME"
-            - "cloudflare.proxied=true"
+            - "cloudflare.proxied=false"
 
             - "traefik.enable=true"
             - "traefik.http.routers.mcserverbuilder.rule=Host(`minecraft.coisas-mais-estranhas.com.br`)"
