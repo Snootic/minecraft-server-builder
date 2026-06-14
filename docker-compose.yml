@@ -1,8 +1,7 @@
 services:
     minecraft-server-builder:
         build:
-            context: .
-            dockerfile: dockerfile
+            dockerfile: Dockerfile
         container_name: minecraft-server-builder
         networks:
             - local
