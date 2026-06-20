@@ -21,8 +21,10 @@ const ModpackDetail = ({ onClose }: DetailProps) => {
         selectedDatapacks,
         selectedInstance,
         selectedMods,
+        selectedVersion
     } = useAppStore(
         useShallow((state) => ({
+            selectedVersion: state.selectedVersion,
             selectedProject: state.selectedProject,
             selectedLoader: state.selectedLoader,
             batchUpdateSelections: state.batchUpdateSelections,
@@ -47,7 +49,7 @@ const ModpackDetail = ({ onClose }: DetailProps) => {
         return undefined;
     });
 
-    const { data: versions } = useProjectVersions(selectedProject?.project_id || '');
+    const { data: versions } = useProjectVersions(selectedProject?.project_id || '', {loaders: selectedLoader?.name, game_versions: selectedVersion ?? undefined});
 
     const filteredVersions = useMemo(() =>
         versions.filter(

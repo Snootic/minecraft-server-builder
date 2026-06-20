@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useSuspenseQuery, type UseSuspenseQueryResult } from '@tanstack/react-query';
+import { useSuspenseQueries, useSuspenseQuery, type UseSuspenseQueryResult } from '@tanstack/react-query';
 import type { Category, Loader, Project, ProjectSearchResults, ProjectVersion, Version } from '../types';
 import { MODRINTH_API } from '../constants/API';
 
@@ -8,6 +8,36 @@ const apiClient = axios.create({
     headers: {
         'User-Agent': 'Minecraft-Server-Builder/1.0.0 (snootic@coisas-mais-estranhas.com.br)'
     }
+});
+
+const toQueryArray = (value?: string | string[]) =>
+    value ? JSON.stringify(Array.isArray(value) ? value : [value]) : undefined;
+
+type ProjectVersionFilters = {
+    game_versions?: string | string[];
+    loaders?: string | string[];
+    featured?: boolean;
+};
+
+const getProjectVersionsQueryOptions = (projectId: string, filters?: ProjectVersionFilters) => ({
+    queryKey: ['project-versions', projectId, filters],
+    queryFn: async () => {
+        const params = new URLSearchParams();
+
+        const gameVersions = toQueryArray(filters?.game_versions);
+        if (gameVersions) params.set('game_versions', gameVersions);
+
+        const loaders = toQueryArray(filters?.loaders);
+        if (loaders) params.set('loaders', loaders);
+
+        if (typeof filters?.featured === 'boolean') params.set('featured', String(filters.featured));
+
+        const res: { data: ProjectVersion[] } = await apiClient.get(
+            `/project/${projectId}/version${params.toString() ? `?${params.toString()}` : ''}`
+        );
+        return res.data;
+    },
+    staleTime: 1000 * 60 * 60
 });
 
 export const useSearch = (params: {
@@ -67,14 +97,10 @@ export const useProjects = (projectIds: string[]) => useSuspenseQuery({
     staleTime: 1000 * 60 * 60
 });
 
-export const useProjectVersions = (projectId: string) => useSuspenseQuery({
-    queryKey: ['project-versions', projectId],
-    queryFn: async () => {
-        const res: { data: ProjectVersion[] } = await apiClient.get(`/project/${projectId}/version`);
-        return res.data;
-    },
-    staleTime: 1000 * 60 * 60
-});
+export const useProjectVersions = (
+    projectId: string,
+    filters?: ProjectVersionFilters
+) => useSuspenseQuery(getProjectVersionsQueryOptions(projectId, filters));
 
 export const useCategories = () => useSuspenseQuery({
     queryKey: ['categories'],
@@ -114,23 +140,21 @@ export const useLoaders = (): UseSuspenseQueryResult<Loader[], Error> => useSusp
     staleTime: 1000 * 60 * 60 * 24
 });
 
-export const useGeyser = (version: string, loader: string): UseSuspenseQueryResult<ProjectVersion[] | null, Error> => useSuspenseQuery({
-    queryKey: ['geyser', version, loader],
-    queryFn: async () => {
-        //wKkoqHrH - geyserId
-        //bWrNNfkb - floodgateId
-        const projectIds = ["wKkoqHrH", "bWrNNfkb"];
-        const mods = [];
-        for (const id of projectIds) {
-            const versionsRes: { data: ProjectVersion[] } = await apiClient.get(`/project/${id}/version`);
-            const compatibleVersion = versionsRes.data.find(v => 
-                v.game_versions.includes(version) && v.loaders.includes(loader)
-            );
-            if (compatibleVersion) {
-                mods.push(compatibleVersion);
-            }
-        }
-        return mods;
-    },
-    staleTime: 1
-});
+// is this really necessary? Investigate further later.
+export const useGeyser = (version: string, loader: string) => {
+    const projectIds = ["wKkoqHrH", "bWrNNfkb"] as const;
+    const versionQueries = useSuspenseQueries({
+        queries: projectIds.map((projectId) =>
+            getProjectVersionsQueryOptions(projectId, {
+                game_versions: version,
+                loaders: loader
+            })
+        )
+    });
+
+    return {
+        data: versionQueries
+            .map((query) => query.data[0])
+            .filter((version): version is ProjectVersion => Boolean(version))
+    };
+};
