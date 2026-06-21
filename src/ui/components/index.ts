@@ -9,3 +9,4 @@ export { CheckboxList } from './CheckboxList';
 export { VersionList } from './VersionList';
 export { SearchableDropdown } from './SearchableDropdown';
 export { Snackbar } from './Snackbar';
+export { Pagination } from './Pagination';

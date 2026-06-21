@@ -1,5 +1,4 @@
 import { Download, Layers } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import type { ProjectSearchResults } from '@/types';
@@ -13,8 +12,6 @@ interface ProjectGridProps {
 }
 
 const ProjectGrid = ({ searchResults, page, setPage }: ProjectGridProps) => {
-	const { t } = useTranslation()
-
 	const { selectedInstance, selectedDatapacks, selectedMods } = useAppStore(
 		useShallow((state) => ({
 			selectedInstance: state.selectedInstance,
@@ -39,6 +36,7 @@ const ProjectGrid = ({ searchResults, page, setPage }: ProjectGridProps) => {
 	const endIndex = startIndex + 10
 
 	const projectsToShow = projects.slice(startIndex, endIndex)
+	const totalPages = Math.ceil(totalProjects / 10)
 
 	return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -75,79 +73,7 @@ const ProjectGrid = ({ searchResults, page, setPage }: ProjectGridProps) => {
 				</UI.GlassCard>
       ))}
 			
-			<div className="relative col-span-full flex justify-center items-center mt-4">
-				{Array.from({ length: page }).map((_, idx) => {
-					const pageNum = idx + 1;
-
-					if (pageNum > 0 && pageNum < 4) {
-						return (
-							<button
-								key={pageNum}
-								className="mx-1 bg-secondary hover:bg-accent text-white w-8 h-8 rounded-full flex items-center justify-center shadow transition"
-								onClick={() => setPage(pageNum - 1)}
-							>
-								{pageNum}
-							</button>
-						);
-					}
-
-					if (pageNum >= (page - 2)) {
-						return (
-							<button
-								key={pageNum}
-								className="mx-1 bg-secondary hover:bg-accent text-white w-8 h-8 rounded-full flex items-center justify-center shadow transition"
-								onClick={() => setPage(pageNum - 1)}
-							>
-								{pageNum}
-							</button>
-						);
-					}
-
-					if (idx === 3) {
-						return (<span key={`page-ellipsis`} className="mx-1 text-slate-400">...</span>);
-					}
-					return null;
-
-				})}
-				{(projects.length - 10) > 0 && (
-					<button
-						className="bg-primary hover:bg-accent text-white p-1 h-8 rounded-full flex items-center justify-center shadow transition"
-						onClick={() => setPage(page + 1)}
-					>
-						{page + 1} - {t("Next")}
-					</button>
-				)}
-				{totalProjects > 10 && (
-					<>
-						{[page + 2, page + 3].map((p) => {
-							const maxPage = Math.ceil(totalProjects / 10);
-							if (p <= maxPage && p !== page + 1) {
-								return (
-									<button
-										key={p}
-										className="mx-1 bg-secondary hover:bg-accent text-white w-8 h-8 rounded-full flex items-center justify-center shadow transition"
-										onClick={() => setPage(p - 1)}
-									>
-										{p}
-									</button>
-								);
-							}
-							return null;
-						})}
-						{page + 4 < Math.ceil(totalProjects / 10) && (
-							<span className="mx-1 text-slate-400">...</span>
-						)}
-						{(page + 1) !== Math.ceil(totalProjects / 10) && (
-							<button
-								className="mx-1 bg-secondary hover:bg-accent text-white w-8 h-8 rounded-full flex items-center justify-center shadow transition"
-								onClick={() => setPage(Math.ceil(totalProjects / 10) - 1)}
-							>
-								{Math.ceil(totalProjects / 10)}
-							</button>
-						)}
-					</>
-				)}
-			</div>
+			<UI.Components.Pagination page={page} setPage={setPage} totalPages={totalPages} />
 		</div>
 	);
 }
