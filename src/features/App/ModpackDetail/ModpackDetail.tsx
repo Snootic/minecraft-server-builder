@@ -51,14 +51,7 @@ const ModpackDetail = ({ onClose }: DetailProps) => {
 
     const { data: versions } = useProjectVersions(selectedProject?.project_id || '', {loaders: selectedLoader?.name, game_versions: selectedVersion ?? undefined});
 
-    const filteredVersions = useMemo(() =>
-        versions.filter(
-            (v) => v.loaders && (!selectedLoader?.name || v.loaders.includes(selectedLoader.name))
-        ),
-        [versions, selectedLoader]
-    );
-
-    const versionToShow = selectedSomething || filteredVersions[0];
+    const versionToShow = selectedSomething || versions[0];
 
     const dependenciesIds = useMemo(() => {
         if (!versionToShow) return [];
