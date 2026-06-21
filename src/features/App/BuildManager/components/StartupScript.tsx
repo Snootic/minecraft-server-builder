@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { Terminal } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 import { useServerConfigurationStore } from "@stores/useServerConfiguration";
-import { useJavaVersion } from "../hooks/useJavaVersions";
 import { useAikarFlags } from "../hooks/useAikarFlags";
 import UI from "@ui";
+import { getJavaVersion } from "@/tools/versionHelpers";
 
 const StartupScript = () => {
     const { t } = useTranslation();
@@ -21,12 +21,10 @@ const StartupScript = () => {
         }))
     );
 
-    const getJavaVersion = useJavaVersion();
     const generateAikarFlags = useAikarFlags();
     const resolvedJavaVersion = useMemo(() => {
-        if (!chosenVersion || !getJavaVersion(chosenVersion)) return 21;
         return getJavaVersion(chosenVersion);
-    }, [chosenVersion, getJavaVersion]);
+    }, [chosenVersion]);
 
 
     const generatedScript = useMemo(() => {

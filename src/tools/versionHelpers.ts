@@ -30,3 +30,36 @@ export const getLoaderLabelFromProjectVersion = (
 
     return loaderNames.join(", ");
 };
+
+const JAVA_VERSION_MAP: Record<string, number> = {
+    "1.0": 5,
+    "1.6": 6,
+    "1.7": 7,
+    "1.8": 8,
+    "1.17": 16,
+    "1.18": 17,
+    "1.21": 21,
+    "26.1": 25,
+};
+
+const JAVA_VERSION_THRESHOLDS = Object.entries(JAVA_VERSION_MAP)
+    .map(([version, javaVersion]) => ({
+        minecraftVersion: version.split(".").map(Number),
+        javaVersion,
+    }))
+    .sort((a, b) => compareVersions(a.minecraftVersion, b.minecraftVersion));
+
+export const getJavaVersion = (version: string): number => {
+    const minecraftVersion = version.split(".").map(Number);
+    let resolvedJavaVersion: number = 25;
+
+    for (const threshold of JAVA_VERSION_THRESHOLDS) {
+        if (compareVersions(minecraftVersion, threshold.minecraftVersion) < 0) {
+            break;
+        }
+
+        resolvedJavaVersion = threshold.javaVersion;
+    }
+
+    return resolvedJavaVersion;
+};
