@@ -74,7 +74,7 @@ const PropertiesManager = () => {
                     </h3>
                 </div>
                 <div className="grid grid-cols-1 max-h-[50vh] overflow-y-auto custom-scrollbar p-2">
-                    {Object.entries(propertiesFile).map(([key, value]) => (
+                    {Object.entries(propertiesFile).sort(([a], [b]) => a.localeCompare(b)).map(([key, value]) => (
                         <UI.Components.Entry key={key} entryKey={key} value={value} onChange={(k, v) => {
                             setPropertiesFile({
                                 ...propertiesFile,
