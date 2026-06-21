@@ -32,6 +32,10 @@ export const ServerPropertiesSchema = {
 
     //diffs per version
     //will override the generic base
+    //many settings first introductions are missing as stated on the wiki, so they'll not be included here.
+//  //That's unfornately the best we can do, but at least we have a base to work with.
+//  //If you know any missing setting version addition, please do not hesitate on adding it here 
+//  //and submitting it in the wiki, please! 
     versionHistory: [
         {
             version: "1.2.1",
@@ -124,6 +128,13 @@ export const ServerPropertiesSchema = {
             },
             removals: ["allow-nether", "enable-command-block", "pvp", "spawn-monsters"],
             notes: "Major management overhaul and cleanup of legacy toggles."
+        },
+        {
+            version: "26.2",
+            additions: {
+                "chat-spam-threshold-seconds": 10,
+                "command-spam-threshold-seconds": 10
+            }
         }
     ] as VersionDiff[]
 };
