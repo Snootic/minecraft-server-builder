@@ -13,6 +13,22 @@ const apiClient = axios.create({
 const toQueryArray = (value?: string | string[]) =>
     value ? JSON.stringify(Array.isArray(value) ? value : [value]) : undefined;
 
+//since most forge mods does not run properly on neoforge, we are considering they are similar here
+//perhaps in the future we can add a more elaborated logic here.
+const SIMILAR_LOADERS: Record<string, string[]> = {
+  fabric: ['fabric'],
+  quilt: ['quilt', 'fabric'],
+  forge: ['forge'],
+  neoforge: ['neoforge'],
+};
+
+const expandLoaders = (loaders?: string | string[]) => {
+    if (!loaders) return loaders;
+
+    const loaderList = Array.isArray(loaders) ? loaders : [loaders];
+    return [...new Set(loaderList.flatMap((loader) => SIMILAR_LOADERS[loader] || [loader]))];
+};
+
 type ProjectVersionFilters = {
     game_versions?: string | string[];
     loaders?: string | string[];
@@ -27,7 +43,7 @@ const getProjectVersionsQueryOptions = (projectId: string, filters?: ProjectVers
         const gameVersions = toQueryArray(filters?.game_versions);
         if (gameVersions) params.set('game_versions', gameVersions);
 
-        const loaders = toQueryArray(filters?.loaders);
+        const loaders = toQueryArray(expandLoaders(filters?.loaders));
         if (loaders) params.set('loaders', loaders);
 
         if (typeof filters?.featured === 'boolean') params.set('featured', String(filters.featured));
