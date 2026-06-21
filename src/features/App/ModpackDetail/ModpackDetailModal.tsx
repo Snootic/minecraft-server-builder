@@ -10,7 +10,7 @@ const ModpackDetailModal = memo(() => {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex backdrop-blur-md animate-in fade-in duration-300 items-center justify-center"
+            className="modal-overlay fixed inset-0 z-50 flex animate-in fade-in duration-300 items-center justify-center"
             onClick={() => setSelectedProjectId(null)}
         >
             <div onClick={(e) => e.stopPropagation()}>

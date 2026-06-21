@@ -53,8 +53,8 @@ const BuildManager = ({ onClose, projects, manageButton }: BuildManagerProps) =>
         }));
     }, [commonVersions]);
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-6 bg-black/30">
-            <UI.GlassCard className="w-full max-w-7xl h-[90vh] overflow-hidden flex flex-col relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-6">
+            <UI.GlassCard className="modal-card w-full max-w-7xl h-[90vh] overflow-hidden flex flex-col relative">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 py-2 px-3 hover:bg-[var(--contrast-dark)] rounded-full transition-colors z-10 group flex items-center overflow-hidden transition-all duration-500 cursor-pointer"
@@ -118,22 +118,22 @@ const BuildManager = ({ onClose, projects, manageButton }: BuildManagerProps) =>
                         <QuickSettings />
                     </div>
 
-                    <div className="bg-white/5 border border-white/10 p-4 rounded-xl">
+                    <div className="modal-panel p-4 rounded-xl">
                         <GameruleEditor />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <PropertiesManager/>
                         <div className="flex flex-col gap-3">
-                            <div className="bg-white/5 border border-white/10 p-4 rounded-xl">
+                            <div className="modal-panel p-4 rounded-xl">
                                 <StartupScript />
                             </div>
                             <button
                                 className={`
                                     w-full px-6 py-4 rounded-xl font-bold text-lg
-                                    transition-all duration-300
-                                    bg-[var(--accent)] hover:bg-[var(--accent)]/80 text-[var(--bg-surface-light)] cursor-pointer
-                                    shadow-lg hover:shadow-xl
+                                    transition-colors duration-200
+                                    bg-(--accent) hover:bg-(--accent)/80 text-(--bg-surface-light) cursor-pointer
+                                    shadow-sm md:shadow-lg
                                 `}
                                 onClick={() => {
                                     void build();

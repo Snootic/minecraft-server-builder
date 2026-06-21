@@ -116,8 +116,8 @@ const ModpackDetail = ({ projectId, onClose }: DetailProps) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-6 bg-black/30">
-            <UI.GlassCard className="w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-6">
+            <UI.GlassCard className="modal-card w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col relative">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 py-2 px-3 hover:bg-[var(--contrast-dark)] rounded-full transition-colors z-10 group flex items-center overflow-hidden transition-all duration-500 cursor-pointer"
@@ -135,7 +135,7 @@ const ModpackDetail = ({ projectId, onClose }: DetailProps) => {
                 <div className="overflow-y-auto custom-scrollbar p-4 md:p-8">
                     <div className="flex flex-col md:flex-row gap-4 md:gap-8 mb-6 md:mb-8">
                         {selectedProject.icon_url && (
-                            <img src={selectedProject.icon_url} alt={selectedProject.title} className="w-20 h-20 md:w-32 md:h-32 rounded-3xl shadow-2xl" />
+                            <img src={selectedProject.icon_url} alt={selectedProject.title} className="w-20 h-20 md:w-32 md:h-32 rounded-3xl shadow-md md:shadow-2xl" />
                         )}
                         <div className="flex-1">
                             <h2 className="text-2xl md:text-4xl font-black mb-2">{selectedProject.title}</h2>
@@ -168,7 +168,7 @@ const ModpackDetail = ({ projectId, onClose }: DetailProps) => {
                     </h3>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div className="grid grid-cols-1 bg-white/5 border border-white/10 p-2 rounded-xl gap-3 max-h-[30vh] overflow-y-auto custom-scrollbar">
+                        <div className="modal-panel grid grid-cols-1 p-2 rounded-xl gap-3 max-h-[30vh] overflow-y-auto custom-scrollbar">
                             {dependenciesIds.length > 0 ? (
                                 <Suspense fallback={<UI.Loading size="sm" />}>
                                     <UI.Components.ProjectList
@@ -194,9 +194,9 @@ const ModpackDetail = ({ projectId, onClose }: DetailProps) => {
                 </div>
 
                 {selectedProjectVersion && (
-                    <div className="fixed bottom-3 right-4">
+                    <div className="absolute bottom-3 right-4">
                         <button
-                            onClick={() => { onClose(); }}
+                            onClick={onClose}
                             className="bottom-4 right-4 p-2 bg-[var(--primary-dark)] hover:bg-[var(--accent-dark)]/40 rounded-full transition-colors z-10 cursor-pointer"
                         >
                             <span className='flex gap-2 px-2 text-[var(--text-primary)]'>

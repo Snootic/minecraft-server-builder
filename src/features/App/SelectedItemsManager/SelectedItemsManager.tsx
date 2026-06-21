@@ -82,8 +82,8 @@ const SelectedItemsManager = ({ onClose, projects }: SelectedItemsManagerProps) 
     ])
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-6 bg-black/30">
-            <UI.GlassCard className="w-full max-w-6xl h-[80vh] overflow-hidden flex flex-col relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-6">
+            <UI.GlassCard className="modal-card w-full max-w-6xl h-[80vh] overflow-hidden flex flex-col relative">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 py-2 px-3 hover:bg-[var(--contrast-dark)] rounded-full transition-colors z-10 group flex items-center overflow-hidden transition-all duration-500 cursor-pointer"
@@ -124,7 +124,7 @@ const SelectedItemsManager = ({ onClose, projects }: SelectedItemsManagerProps) 
                         </div>
 
                         {(isVersionsIncompatible || isLoadersIncompatible) && (
-                            <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
+                            <div className="rounded-xl border border-red-500/20 bg-red-500/14 p-4">
                                 {isVersionsIncompatible && (
                                     <div className="mb-4 last:mb-0">
                                         <h3 className="text-sm font-bold text-red-400 mb-1 flex items-center gap-2">
@@ -161,7 +161,7 @@ const SelectedItemsManager = ({ onClose, projects }: SelectedItemsManagerProps) 
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div className="grid grid-cols-1 bg-white/5 border border-white/10 p-2 rounded-xl gap-3 h-auto max-h-[35vh] md:max-h-none md:h-[60vh]">
+                        <div className="modal-panel grid grid-cols-1 p-2 rounded-xl gap-3 h-auto max-h-[35vh] md:max-h-none md:h-[60vh]">
                             
                             
                             {mainProject && (
@@ -186,7 +186,7 @@ const SelectedItemsManager = ({ onClose, projects }: SelectedItemsManagerProps) 
                             </div>
                         </div>
 
-                        <div className="grid grid-rows-2 bg-white/5 border border-white/10 p-2 rounded-xl gap-3 max-h-[35vh] md:max-h-[60vh]">
+                        <div className="modal-panel grid grid-rows-2 p-2 rounded-xl gap-3 max-h-[35vh] md:max-h-[60vh]">
                             <div className="flex flex-col gap-2 h-[15vh] md:h-[30vh]">
                                 <h3 className="text-1xl font-bold text-[var(--text-primary)] uppercase">
                                     {`${t("Mod", {count: 2})}: ${selectedMods.length} 
@@ -229,7 +229,7 @@ const SelectedItemsManager = ({ onClose, projects }: SelectedItemsManagerProps) 
                     </div>
                 </div>
                 {hasChange && (
-                    <div className="fixed bottom-3 right-4">
+                    <div className="absolute bottom-3 right-4">
                         <button
                             onClick={() => { onClose(); saveChanges()}}
                             className="bottom-4 right-4 p-2 bg-[var(--primary-dark)] hover:bg-[var(--accent-dark)]/40 rounded-full transition-colors z-10 cursor-pointer"

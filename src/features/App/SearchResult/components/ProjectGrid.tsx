@@ -44,12 +44,12 @@ const ProjectGrid = ({ searchResults, page, setPage }: ProjectGridProps) => {
 			{projectsToShow.map((pack) => (
 				<UI.GlassCard
 					key={pack.project_id}
-					className={`${selectedProjects.includes(pack.project_id) ? 'bg-(--primary)/80!' : ''} p-4 flex gap-4 hover:border-(--glass-border) transition-all duration-300 cursor-pointer group hover:scale-[1.02] active:scale-[0.98]`}
+					className={`project-grid-card ${selectedProjects.includes(pack.project_id) ? 'bg-(--primary)/80!' : ''} p-4 flex gap-4 transition-all duration-300 cursor-pointer group md:hover:border-(--glass-border) md:hover:scale-[1.02] active:scale-[0.99]`}
 						onClick={() => setSelectedProjectId(pack.project_id)}
 					>
 					<div className="relative shrink-0">
 						{pack.icon_url ? (
-							<img src={pack.icon_url} alt={pack.title} className="w-20 h-20 rounded-xl object-cover shadow-lg" />
+							<img src={pack.icon_url} alt={pack.title} loading="lazy" decoding="async" className="w-20 h-20 rounded-xl object-cover shadow-sm md:shadow-lg" />
 						) : (
 							<div className="w-20 h-20 bg-(--glass-bg) rounded-xl flex items-center justify-center">
 								<Layers className="text-(--glass-bg)" />
@@ -59,14 +59,14 @@ const ProjectGrid = ({ searchResults, page, setPage }: ProjectGridProps) => {
 
 					<div className="flex-1 min-w-0">
 						<div className="flex justify-between items-start">
-							<h3 className={`font-bold text-lg truncate transition-colors ${selectedProjects.includes(pack.project_id) ? 'group-hover:text-(--bg-surface-dark)!' : 'group-hover:text-(--accent)'}`}>{pack.title}</h3>
+							<h3 className={`font-bold text-lg truncate transition-colors ${selectedProjects.includes(pack.project_id) ? 'md:group-hover:text-(--bg-surface-dark)!' : 'md:group-hover:text-(--accent)'}`}>{pack.title}</h3>
 						</div>
-						<p className={`text-slate-400 text-xs line-clamp-2 mt-1 mb-3 ${selectedProjects.includes(pack.project_id) ? 'text-(--bg-surface-light)/80! group-hover:text-(--bg-surface-dark)!' : ''}`}>{pack.description}</p>
+						<p className={`text-slate-400 text-xs line-clamp-2 mt-1 mb-3 ${selectedProjects.includes(pack.project_id) ? 'text-(--bg-surface-light)/80! md:group-hover:text-(--bg-surface-dark)!' : ''}`}>{pack.description}</p>
 						<div className="flex items-center justify-between text-[10px] font-bold">
-							<span className={`flex items-center gap-1 text-slate-500 ${selectedProjects.includes(pack.project_id) ? 'text-(--bg-surface-light)/80!  group-hover:text-(--bg-surface-dark)!' : ''}`}>
+							<span className={`flex items-center gap-1 text-slate-500 ${selectedProjects.includes(pack.project_id) ? 'text-(--bg-surface-light)/80! md:group-hover:text-(--bg-surface-dark)!' : ''}`}>
 								<Download size={10} /> {pack.downloads.toLocaleString()}
 							</span>
-							<span className={`text-slate-300 bg-white/5 px-2 py-0.5 rounded text-xs opacity-60 ${selectedProjects.includes(pack.project_id) ? 'text-(--bg-surface-light)/80!  group-hover:text-(--bg-surface-dark)!' : ''}`}>
+							<span className={`text-slate-300 bg-white/5 px-2 py-0.5 rounded text-xs opacity-60 ${selectedProjects.includes(pack.project_id) ? 'text-(--bg-surface-light)/80! md:group-hover:text-(--bg-surface-dark)!' : ''}`}>
 								{pack.author}
 							</span>
 						</div>

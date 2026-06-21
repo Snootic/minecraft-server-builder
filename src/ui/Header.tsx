@@ -4,7 +4,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { memo } from "react";
 
 export const Header = memo(() => (
-    <header className="sticky top-0 z-40 border-b border-white/5 bg-bg-surface/80 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-white/5 bg-bg-surface md:bg-bg-surface/80 md:backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 py-1 md:py flex items-center justify-between">
             <div className="flex items-center gap-1">
                 <div className="bg-primary rounded-lg flex items-center justify-center shadow-md shadow-primary/20 overflow-hidden scale-50 px-2">

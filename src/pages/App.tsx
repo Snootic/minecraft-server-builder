@@ -113,7 +113,7 @@ const App = () => {
             <UI.SnackbarContainer />
 
             {showBuildManager && (
-                <div className="fixed inset-0 z-50 flex backdrop-blur-md animate-in fade-in duration-300">
+                <div className="modal-overlay fixed inset-0 z-50 flex animate-in fade-in duration-300">
                     <Suspense fallback={<UI.Loading size="lg" />}>
                         {projectData.isLoading ? (
                             <UI.Loading size="lg" />
@@ -128,7 +128,7 @@ const App = () => {
                 </div>
             )}
             {showSelectedItemsManager && (
-                <div className="fixed inset-0 z-50 flex backdrop-blur-md animate-in fade-in duration-300">
+                <div className="modal-overlay fixed inset-0 z-50 flex animate-in fade-in duration-300">
                     <Suspense fallback={<UI.Loading size="lg" />}>
                         {projectData.isLoading ? (
                             <UI.Loading size="lg" />

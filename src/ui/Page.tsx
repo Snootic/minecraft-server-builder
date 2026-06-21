@@ -35,8 +35,9 @@ export const Page = memo(({ children, locked = false }: { children: ReactNode; l
     return (
         <div className={`min-h-screen text-slate-200 selection:bg-primary/30 ${locked ? 'overflow-hidden' : ''}`}>
             <div className="fixed inset-0 bg-bg-surface overflow-hidden pointer-events-none">
-                <div className="absolute -top-10% -left-10% w-40% h-40% bg-primary/10 blur-[120px] rounded-full" />
-                <div className="absolute top-20% -right-5% w-30% h-30% bg-accent/5 blur-[100px] rounded-full" />
+                <div className="absolute inset-0 bg-radial from-primary/8 via-transparent to-transparent" />
+                <div className="absolute -top-10% -left-10% h-[40%] w-[40%] rounded-full bg-primary/10 blur-[120px]" />
+                <div className="absolute top-[20%] -right-5% h-[30%] w-[30%] rounded-full bg-accent/5 blur-[100px]" />
             </div>
             {children}
             <div className="fixed bottom-6 right-6 z-50 pointer-events-auto">
