@@ -81,14 +81,14 @@ const ModpackDetail = ({ onClose }: DetailProps) => {
 
         if (version.loaders.includes("datapack")) {
             batchUpdateSelections({
-                selectedDatapacks: [...selectedDatapacks, version],
+                selectedDatapacks: [...selectedDatapacks.filter((d) => d.id !== selectedSomething?.id), version],
             });
             setSelectedSomething(version);
         } else {
             if (selectedProject?.project_type === "modpack") {
                 batchUpdateSelections({ selectedInstance: version });
             } else {
-                batchUpdateSelections({ selectedMods: [...selectedMods, version] });
+                batchUpdateSelections({ selectedMods: [...selectedMods.filter((m) => m.id !== selectedSomething?.id), version] });
             }
             setSelectedSomething(version);
         }
