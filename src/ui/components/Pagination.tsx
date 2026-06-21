@@ -4,25 +4,27 @@ interface PaginationProps {
     page: number;
     setPage: (page: number) => void;
     totalPages: number;
+    compact?: boolean;
 }
 
 interface PageButtonProps {
     active?: boolean;
     onClick?: () => void;
     pageNumber: number;
+    compact?: boolean;
 }
 
-const PageButton = ({ active = false, onClick, pageNumber }: PageButtonProps) => (
+const PageButton = ({ active = false, onClick, pageNumber, compact = false }: PageButtonProps) => (
     <button
         type="button"
-        className={`mx-1 min-w-8 h-8 px-2 rounded-full flex items-center justify-center shadow transition text-white ${active ? "bg-primary hover:bg-accent" : "bg-secondary hover:bg-accent"}`}
+        className={`${compact ? "mx-0.5 min-w-7 h-7 px-1.5 text-xs" : "mx-1 min-w-8 h-8 px-2"} rounded-full flex items-center justify-center shadow transition text-white ${active ? "bg-primary hover:bg-accent" : "bg-secondary hover:bg-accent"}`}
         onClick={onClick}
     >
         {pageNumber}
     </button>
 );
 
-export const Pagination = memo(({ page, setPage, totalPages }: PaginationProps) => {
+export const Pagination = memo(({ page, setPage, totalPages, compact = false }: PaginationProps) => {
     if (totalPages <= 1) return null;
 
     const currentPage = page + 1;
@@ -34,28 +36,30 @@ export const Pagination = memo(({ page, setPage, totalPages }: PaginationProps) 
     const nextPages = [currentPage + 1, currentPage + 2].filter((pageNum) => pageNum < totalPages);
 
     return (
-        <div className="relative col-span-full flex justify-center items-center mt-4">
+        <div className={`relative col-span-full flex justify-center items-center ${compact ? "mt-2" : "mt-4"}`}>
             {previousPages.map((pageNum, idx) => (
                 <Fragment key={pageNum}>
                     {previousEllipsis && idx === 3 && (
-                        <span className="mx-1 text-slate-400">...</span>
+                        <span className={`${compact ? "mx-0.5 text-xs" : "mx-1"} text-slate-400`}>...</span>
                     )}
-                    <PageButton pageNumber={pageNum} onClick={() => setPage(pageNum - 1)} />
+                    <PageButton compact={compact} pageNumber={pageNum} onClick={() => setPage(pageNum - 1)} />
                 </Fragment>
             ))}
-            <PageButton active pageNumber={currentPage} />
+            <PageButton compact={compact} active pageNumber={currentPage} />
             {nextPages.map((pageNum) => (
                 <PageButton
                     key={pageNum}
+                    compact={compact}
                     pageNumber={pageNum}
                     onClick={() => setPage(pageNum - 1)}
                 />
             ))}
             {currentPage + 3 < totalPages && (
-                <span className="mx-1 text-slate-400">...</span>
+                <span className={`${compact ? "mx-0.5 text-xs" : "mx-1"} text-slate-400`}>...</span>
             )}
             {currentPage !== totalPages && (
                 <PageButton
+                    compact={compact}
                     pageNumber={totalPages}
                     onClick={() => setPage(totalPages - 1)}
                 />
