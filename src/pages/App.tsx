@@ -1,15 +1,15 @@
 import {
-    useState,
-    useMemo,
     Suspense,
     useCallback,
     useDeferredValue,
+    useMemo,
+    useState,
 } from "react";
-import { useAppStore } from "@stores/useStore";
 import { ChevronDown, Layers } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useSelectionFeedback } from "@features/App/hooks/useSelectionFeedback";
 import { useProjectData } from "@features/App/hooks/useProjectData";
+import { useCatalogParams } from "@features/App/hooks/useCatalogParams";
 import {
     BuildButton,
     BuildManager,
@@ -20,75 +20,74 @@ import {
     SearchResult,
     SelectedItemsManager,
 } from "@features/App";
-import { useShallow } from "zustand/react/shallow";
-import type { Category } from "@/types";
 import UI from "@/ui";
 
 const App = () => {
     const { t } = useTranslation();
-
-    const [pageOffset, setPageOffset] = useState<number>(0);
-    const [modpackQuery, setModpackQuery] = useState<string>("");
-    const [selectedCategories, setSelectedCategories] = useState<Category[]>(
-        [],
-    );
-    const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
     const [showSelectedItemsManager, setShowSelectedItemsManager] =
         useState<boolean>(false);
     const [showBuildManager, setShowBuildManager] = useState<boolean>(false);
+    const [showFilters, setShowFilters] = useState(false);
 
-    const { selectedVersion, selectedLoader, setSelectedLoader } = useAppStore(
-        useShallow((state) => ({
-            selectedVersion: state.selectedVersion,
-            selectedLoader: state.selectedLoader,
-            setSelectedLoader: state.setSelectedLoader,
-        })),
-    );
+    const {
+        page,
+        query,
+        selectedLoader,
+        selectedVersion,
+        selectedCategories,
+        selectedTypes,
+        selectedProjectId,
+        setPage,
+        setQuery,
+        setSelectedLoader,
+        setSelectedCategories,
+        setSelectedTypes,
+    } = useCatalogParams();
 
-    const deferredQuery = useDeferredValue(modpackQuery);
+    const deferredQuery = useDeferredValue(query);
 
     const searchParams = useMemo(() => {
         const projectTypesFacet: { [key: string]: string[] } = {};
-        if (selectedLoader && selectedLoader.supported_project_types) {
-            projectTypesFacet["project_type"] = Object.values(
+
+        if (selectedLoader?.supported_project_types) {
+            projectTypesFacet.project_type = Object.values(
                 selectedLoader.supported_project_types,
             );
         }
+
         if (selectedTypes.length > 0 && selectedLoader?.name !== "datapack") {
-            if (
-                projectTypesFacet["project_type"] &&
-                Object.keys(projectTypesFacet).length > 0
-            ) {
-                projectTypesFacet["project_type"] = projectTypesFacet[
-                    "project_type"
-                ].filter((type) => selectedTypes.includes(type));
+            if (projectTypesFacet.project_type) {
+                projectTypesFacet.project_type =
+                    projectTypesFacet.project_type.filter((type) =>
+                        selectedTypes.includes(type),
+                    );
             } else {
-                projectTypesFacet["project_type"] = selectedTypes;
+                projectTypesFacet.project_type = selectedTypes;
             }
         }
 
-        if (Object.keys(projectTypesFacet).length < 1) {
-            projectTypesFacet["project_type"] = ["modpack", "datapack", "mod"];
+        if (!projectTypesFacet.project_type || projectTypesFacet.project_type.length < 1) {
+            projectTypesFacet.project_type = ["modpack", "datapack", "mod"];
         }
 
         if (selectedVersion) {
-            projectTypesFacet["versions"] = [selectedVersion];
+            projectTypesFacet.versions = [selectedVersion];
         }
 
         return {
             query: deferredQuery,
             loader: selectedLoader?.name,
-            categories: selectedCategories.map((c) => c.name),
+            categories: selectedCategories,
             facets: projectTypesFacet,
-            offset: pageOffset,
+            offset: page,
         };
     }, [
         deferredQuery,
-        pageOffset,
+        page,
         selectedCategories,
         selectedLoader,
-        selectedVersion,
         selectedTypes,
+        selectedVersion,
     ]);
 
     const projectData = useProjectData();
@@ -107,12 +106,8 @@ const App = () => {
         projectData.mainProject,
     );
 
-    const hasSelectedProject = useAppStore((s) => s.selectedProject !== null);
-    
-    const [showFilters, setShowFilters] = useState(false);
-
     return (
-        <UI.Page locked={hasSelectedProject}>
+        <UI.Page locked={selectedProjectId !== null}>
             <UI.Header />
             <ModpackDetail />
             <UI.SnackbarContainer />
@@ -171,21 +166,20 @@ const App = () => {
                                     setSelectedLoader={setSelectedLoader}
                                 />
                             </Suspense>
-                            <SearchBar
-                                value={modpackQuery}
-                                onChange={setModpackQuery}
-                            />
+                            <SearchBar value={query} onChange={setQuery} />
                         </div>
-                        <div className={`md:hidden col-span-2 flex relative justify-between`}>
+                        <div className="md:hidden col-span-2 flex relative justify-between">
                             <div
                                 className="flex items-center justify-center gap-1 text-slate-400 cursor-pointer p-2 border border-white/10 rounded-xl"
-                                onClick={() => setShowFilters(prev => !prev)}
+                                onClick={() => setShowFilters((prev) => !prev)}
                             >
                                 <h3>Filters</h3>
                                 <ChevronDown />
                             </div>
                             <BuildButton onClick={handleBuild} />
-                            <div className={`absolute top-full right-0 w-full bg-(--bg-surface-light) rounded-xl border border-white/10 p-1 ${showFilters ? "block" : "hidden"}`}>
+                            <div
+                                className={`absolute top-full right-0 w-full bg-(--bg-surface-light) rounded-xl border border-white/10 p-1 ${showFilters ? "block" : "hidden"}`}
+                            >
                                 <Suspense fallback={<UI.Loading size="md" />}>
                                     <FilterSidebar
                                         selectedCategories={selectedCategories}
@@ -212,8 +206,8 @@ const App = () => {
                         <Suspense fallback={<UI.Loading size="lg" />}>
                             <SearchResult
                                 params={searchParams}
-                                page={pageOffset}
-                                setPage={setPageOffset}
+                                page={page}
+                                setPage={setPage}
                             />
                         </Suspense>
                     </div>

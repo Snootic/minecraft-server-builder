@@ -12,17 +12,34 @@ export type Project = {
   thread_id: string;
   monetization_status?: "monetized" | "demonetized" | "force-demonetized";
   project_id: string;
-  author: string;
+  author?: string;
+  team?: string;
   display_categories: string[];
   versions: string[];
   follows: number;
   date_created: string;
   date_modified: string;
   latest_version?: string;
-  license: string;
+  license: string | {
+    id: string;
+    name: string;
+    url: string | null;
+  };
   gallery: string[];
   featured_gallery: string | null;
   id: string;
+};
+
+export type TeamMember = {
+  team_id: string;
+  role: string;
+  ordering: number;
+  user: {
+    id: string;
+    username: string;
+    name: string | null;
+    avatar_url: string;
+  };
 };
 
 export interface ProjectSearchResults {

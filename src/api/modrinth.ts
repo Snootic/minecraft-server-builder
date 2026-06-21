@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useSuspenseQueries, useSuspenseQuery, type UseSuspenseQueryResult } from '@tanstack/react-query';
-import type { Category, Loader, Project, ProjectSearchResults, ProjectVersion, Version } from '../types';
+import type { Category, Loader, Project, ProjectSearchResults, ProjectVersion, TeamMember, Version } from '../types';
 import { MODRINTH_API } from '../constants/API';
 
 const apiClient = axios.create({
@@ -108,6 +108,24 @@ export const useProjects = (projectIds: string[]) => useSuspenseQuery({
     queryFn: async () => {
         const ids = JSON.stringify(projectIds);
         const res: { data: Project[] } = await apiClient.get(`/projects?ids=${encodeURIComponent(ids)}`);
+        return res.data;
+    },
+    staleTime: 1000 * 60 * 60
+});
+
+export const useProject = (projectId: string) => useSuspenseQuery({
+    queryKey: ["project", projectId],
+    queryFn: async () => {
+        const res: { data: Project } = await apiClient.get(`/project/${projectId}`);
+        return res.data;
+    },
+    staleTime: 1000 * 60 * 60
+});
+
+export const useProjectMembers = (projectId: string) => useSuspenseQuery({
+    queryKey: ["project-members", projectId],
+    queryFn: async () => {
+        const res: { data: TeamMember[] } = await apiClient.get(`/project/${projectId}/members`);
         return res.data;
     },
     staleTime: 1000 * 60 * 60

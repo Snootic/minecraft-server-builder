@@ -11,6 +11,7 @@ import { useServerConfigurationStore } from "@/stores/useServerConfiguration";
 import { useLoaderIncompatibilities } from "../hooks/useLoaderIncompatibilities";
 import UI from "@/ui";
 import { AdditionalMods, GameruleEditor, PropertiesManager, QuickSettings, StartupScript } from "./components";
+import { useCatalogParams } from "../hooks/useCatalogParams";
 
 interface BuildManagerProps {
     onClose: () => void;
@@ -25,15 +26,14 @@ const BuildManager = ({ onClose, projects, manageButton }: BuildManagerProps) =>
 
     const selectedDatapacks = useAppStore(s => s.selectedDatapacks);
     const selectedMods = useAppStore(s => s.selectedMods);
-    const selectedLoader = useAppStore(s => s.selectedLoader);
-    const setSelectedLoader = useAppStore(s => s.setSelectedLoader);
+    const { selectedLoader, setSelectedLoader } = useCatalogParams();
 
     const { commonVersions } = useVersionIncompatibilities()
     const { commonLoaders } = useLoaderIncompatibilities();
 
     const {data: loaders} = useLoaders();
 
-    const build = useBuild();
+    const build = useBuild(selectedLoader);
 
     const {
         chosenVersion,

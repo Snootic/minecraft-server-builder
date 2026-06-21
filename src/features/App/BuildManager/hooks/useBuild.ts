@@ -13,10 +13,11 @@ import { downloadFilesToZip } from "@/tools/fileDownloader";
 import { useServerConfigurationStore } from "@/stores/useServerConfiguration";
 import { useAppStore } from "@/stores/useStore";
 import { useSnackbar } from "@/stores/useSnackbar";
+import type { Loader } from "@/types";
 
 const SNACKBAR_ID = "build-progress";
 
-export const useBuild = () => {
+export const useBuild = (selectedLoader: Loader | null) => {
     const { t } = useTranslation();
 
     const {
@@ -36,18 +37,14 @@ export const useBuild = () => {
     );
 
     const {
-        selectedLoader,
         selectedMods,
         selectedDatapacks,
         selectedInstance,
-        selectedProject,
     } = useAppStore(
         useShallow(s => ({
-            selectedLoader: s.selectedLoader,
             selectedMods: s.selectedMods,
             selectedDatapacks: s.selectedDatapacks,
             selectedInstance: s.selectedInstance,
-            selectedProject: s.selectedProject,
         }))
     );
 
@@ -103,7 +100,7 @@ export const useBuild = () => {
             });
 
             updateProgress(t("Starting download..."), 99);
-            const serverName = instanceName ?? selectedProject?.title ?? "minecraft-server";
+            const serverName = instanceName ?? selectedInstance?.name ?? "minecraft-server";
             const fileName = buildFileName(serverName, chosenVersion, selectedLoader!.name);
             triggerBrowserDownload(blob, fileName);
 
@@ -139,7 +136,6 @@ export const useBuild = () => {
         selectedLoader,
         updateProgress,
         dismissSnackbar,
-        selectedProject,
         selectedInstance,
         selectedDatapacks,
     ]);

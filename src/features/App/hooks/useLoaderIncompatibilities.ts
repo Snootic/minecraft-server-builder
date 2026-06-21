@@ -9,9 +9,7 @@ export const useLoaderIncompatibilities = () => {
     const { selectedInstance, selectedMods } = useAppStore(
         useShallow((s) => ({
             selectedInstance: s.selectedInstance,
-            selectedDatapacks: s.selectedDatapacks,
             selectedMods: s.selectedMods,
-            selectedLoader: s.selectedLoader,
         }))
     );
 

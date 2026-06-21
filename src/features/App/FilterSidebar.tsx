@@ -1,17 +1,16 @@
-import { memo, useCallback, useMemo, type Dispatch, type SetStateAction } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { Gamepad2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useConstantData } from './hooks/useConstantData';
-import { useShallow } from 'zustand/react/shallow';
 import type { Category } from '@/types';
-import { useAppStore } from '@/stores/useStore';
+import { useCatalogParams } from './hooks/useCatalogParams';
 import UI from '@/ui';
 
 interface FilterSidebarProps {
-    selectedCategories: Category[];
-    onCategoriesChange: Dispatch<SetStateAction<Category[]>>;
+    selectedCategories: string[];
+    onCategoriesChange: (categories: string[]) => void;
     selectedTypes: string[];
-    onTypesChange: Dispatch<SetStateAction<string[]>>;
+    onTypesChange: (types: string[]) => void;
 }
 
 const FilterSidebar = memo(({ 
@@ -21,19 +20,8 @@ const FilterSidebar = memo(({
     onTypesChange 
 }: FilterSidebarProps) => {
     const { t } = useTranslation();
-    const { versions, categories: allCategories } = useConstantData();
-    
-    const {
-        selectedVersion,
-        setSelectedVersion,
-        selectedLoader
-    } = useAppStore(
-        useShallow((state) => ({
-            selectedVersion: state.selectedVersion,
-            setSelectedVersion: state.setSelectedVersion,
-            selectedLoader: state.selectedLoader,
-        }))
-    );
+    const { selectedVersion, setSelectedVersion, selectedLoader } = useCatalogParams();
+    const { versions, categories: allCategories } = useConstantData(selectedLoader);
     
     const types = useMemo(() => ["modpack", "mod"], []);
 
@@ -42,16 +30,25 @@ const FilterSidebar = memo(({
     }, [selectedVersion, setSelectedVersion]);
 
     const handleCategoryToggle = useCallback((c: Category) => {
-        onCategoriesChange((prev) =>
-            prev.includes(c) ? prev.filter(cat => cat !== c) : [...prev, c]
+        onCategoriesChange(
+            selectedCategories.includes(c.name)
+                ? selectedCategories.filter((category) => category !== c.name)
+                : [...selectedCategories, c.name],
         );
-    }, [onCategoriesChange]);
+    }, [onCategoriesChange, selectedCategories]);
 
     const handleTypeToggle = useCallback((t: string) => {
-        onTypesChange((prev) =>
-            prev.includes(t) ? prev.filter(type => type !== t) : [...prev, t]
+        onTypesChange(
+            selectedTypes.includes(t)
+                ? selectedTypes.filter((type) => type !== t)
+                : [...selectedTypes, t],
         );
-    }, [onTypesChange]);
+    }, [onTypesChange, selectedTypes]);
+
+    const selectedCategoryItems = useMemo(
+        () => allCategories.filter((category) => selectedCategories.includes(category.name)),
+        [allCategories, selectedCategories],
+    );
 
     return (
         <section>
@@ -77,7 +74,7 @@ const FilterSidebar = memo(({
                     </h4>
                     <UI.Components.CheckboxList
                         items={allCategories}
-                        selectedItems={selectedCategories}
+                        selectedItems={selectedCategoryItems}
                         onToggle={handleCategoryToggle}
                         getKey={(c: Category) => c.name}
                         getLabel={(c: Category) => c.name}

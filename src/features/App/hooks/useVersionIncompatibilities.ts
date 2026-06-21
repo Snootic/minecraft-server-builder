@@ -3,15 +3,16 @@ import { useShallow } from "zustand/react/shallow";
 import { useTranslation } from "react-i18next";
 import { useAppStore } from "@/stores/useStore";
 import type { ProjectVersion } from "@/types";
+import { useCatalogParams } from "./useCatalogParams";
 
 export const useVersionIncompatibilities = () => {
     const { t } = useTranslation();
+    const { selectedVersion } = useCatalogParams();
 
-    const { selectedInstance, selectedDatapacks, selectedVersion, selectedMods } = useAppStore(
+    const { selectedInstance, selectedDatapacks, selectedMods } = useAppStore(
         useShallow((s) => ({
             selectedInstance: s.selectedInstance,
             selectedDatapacks: s.selectedDatapacks,
-            selectedVersion: s.selectedVersion,
             selectedMods: s.selectedMods,
         }))
     );

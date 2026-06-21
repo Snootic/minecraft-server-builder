@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import type { ProjectSearchResults } from '@/types';
 import { useAppStore } from '@/stores/useStore';
+import { useCatalogParams } from '../../hooks/useCatalogParams';
 import UI from '@/ui';
 
 interface ProjectGridProps {
@@ -30,7 +31,7 @@ const ProjectGrid = ({ searchResults, page, setPage }: ProjectGridProps) => {
 	const projects = results.hits
 	const totalProjects = results.total_hits
 
-	const { setSelectedProject } = useAppStore()
+	const { setSelectedProjectId } = useCatalogParams();
 
 	const startIndex = page % 2 === 0 ? 0 : 10
 	const endIndex = startIndex + 10
@@ -44,8 +45,8 @@ const ProjectGrid = ({ searchResults, page, setPage }: ProjectGridProps) => {
 				<UI.GlassCard
 					key={pack.project_id}
 					className={`${selectedProjects.includes(pack.project_id) ? 'bg-(--primary)/80!' : ''} p-4 flex gap-4 hover:border-(--glass-border) transition-all duration-300 cursor-pointer group hover:scale-[1.02] active:scale-[0.98]`}
-					onClick={() => setSelectedProject(pack)}
-				>
+						onClick={() => setSelectedProjectId(pack.project_id)}
+					>
 					<div className="relative shrink-0">
 						{pack.icon_url ? (
 							<img src={pack.icon_url} alt={pack.title} className="w-20 h-20 rounded-xl object-cover shadow-lg" />

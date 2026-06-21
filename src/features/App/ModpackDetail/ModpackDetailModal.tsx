@@ -1,22 +1,24 @@
 import { memo, Suspense } from 'react';
 import ModpackDetail from './ModpackDetail';
-import { useAppStore } from '@/stores/useStore';
+import { useCatalogParams } from '../hooks/useCatalogParams';
 import UI from '@/ui';
 
 const ModpackDetailModal = memo(() => {
-    const selectedProject = useAppStore((s) => s.selectedProject);
-    const setSelectedProject = useAppStore((s) => s.setSelectedProject);
+    const { selectedProjectId, setSelectedProjectId } = useCatalogParams();
 
-    if (!selectedProject) return null;
+    if (!selectedProjectId) return null;
 
     return (
         <div
             className="fixed inset-0 z-50 flex backdrop-blur-md animate-in fade-in duration-300 items-center justify-center"
-            onClick={() => setSelectedProject(null)}
+            onClick={() => setSelectedProjectId(null)}
         >
             <div onClick={(e) => e.stopPropagation()}>
                 <Suspense fallback={<UI.Loading size="lg" />}>
-                    <ModpackDetail onClose={() => setSelectedProject(null)} />
+                    <ModpackDetail
+                        projectId={selectedProjectId}
+                        onClose={() => setSelectedProjectId(null)}
+                    />
                 </Suspense>
             </div>
         </div>

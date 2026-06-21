@@ -7,7 +7,7 @@ const LoaderBar = memo(({ selectedLoader, setSelectedLoader }: {
     selectedLoader: Loader | null;
     setSelectedLoader: (loader: Loader | null) => void;
 }) => {
-    const { loaders } = useConstantData();
+    const { loaders } = useConstantData(selectedLoader);
     return (
         <UI.Components.ButtonGroup
             items={loaders}

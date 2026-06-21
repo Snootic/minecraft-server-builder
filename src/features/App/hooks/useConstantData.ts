@@ -1,11 +1,8 @@
 import { useCategories, useGameVersions, useLoaders } from "@/api/modrinth";
-import { useAppStore } from "@/stores/useStore";
-import type { Category } from "@/types";
+import type { Category, Loader } from "@/types";
 import { useMemo } from "react";
 
-export const useConstantData = () => {
-    const selectedLoader = useAppStore((state) => state.selectedLoader);
-
+export const useConstantData = (selectedLoader: Loader | null) => {
     const { data: versions } = useGameVersions();
     const { data: loaders } = useLoaders();
     const { data: allCategories } = useCategories();
