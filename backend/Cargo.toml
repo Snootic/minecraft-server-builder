@@ -1,0 +1,16 @@
+[package]
+name = "minecraft-server-builder-api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = { version = "0.8.9" }
+serde = { version = "1.0.228", features = ["derive"] }
+tokio = { version = "1.52.3", features = ["full"] }
+validator = {version = "0.20.0", features = ["derive"]}
+axum-valid = "0.24.0"
+serde_json = "1.0.150"
+tower-http = "0.6.11"
+tracing = "0.1.44"
+bollard = {version = "0.21.0", features = ["ssl"]}
+futures-util = "0.3.32"

@@ -2,7 +2,12 @@
 
 <code>Avaible at <a href="https://minecraft.coisas-mais-estranhas.com.br" target="_blank" rel="noopener noreferrer">minecraft.coisas-mais-estranhas.com.br</a></code>
 
-This project lets you build and configure a Minecraft server, supporting gamerules, properties and start file management with a interactive web interface. You can manage modpacks, mods and datapacks available in [Modrinth](https://www.curseforge.com/minecraft/mc-mods).
+This project now lives as a monorepo:
+
+- `frontend/` contains the current Vite + React app
+- `backend/` will contain the Rust API that talks to the Docker host
+
+The frontend lets you build and configure a Minecraft server, supporting gamerules, properties and start file management with a interactive web interface. You can manage modpacks, mods and datapacks available in [Modrinth](https://www.curseforge.com/minecraft/mc-mods).
 
 Currently there is only support for modloaders (Fabric, Forge and Quilt) and datapacks, but support for plugins (paper, velocity, pupur etc.) is planned. The project is still in early development, so expect some bugs and missing features, although the very necessary for a functional server is already available and working (I hope).
 
@@ -13,8 +18,9 @@ As I am not a poliglot and speak only English and Portuguese, most of the transl
 If you want to contribute to the project, you can open an issue or a PR with your changes. I will try to review and merge it as soon as possible.
 
 ## Running the project
-The project run 100% on client side (Vite and React), so you can build it and run it on your own machine without any complications:
+#### Production:
 ```bash
+cd frontend
 npm install
 npm run build
 npm run preview
@@ -22,8 +28,15 @@ npm run preview
 
 #### Development:
 ```bash
+cd frontend
 npm install
 npm run dev
+```
+
+#### Backend:
+```bash
+cd backend
+cargo run
 ```
 
 ### License
